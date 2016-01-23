@@ -15,7 +15,7 @@ def timing(f):
 
 class GitHubKeysScrapper:
     def __init__(self, gh_login, gh_password):
-        self.db_connection = self.db_connect()        
+        self.db_connection = self.db_connect()
         self.gh = github3.login(gh_login, password=gh_password)
 
     def db_connect(self):
@@ -24,12 +24,12 @@ class GitHubKeysScrapper:
         mysql_db  = 'mysql_db'
 
         db_connection = pymysql.connect(
-            #host='localhost'
+            #host='localhost',
             unix_socket='/var/lib/mysql/mysql.sock',
             user=mysql_usr, password=mysql_pwd, db=mysql_db,
             charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor
         )
-        
+
         return db_connection
 
     @timing
@@ -122,7 +122,7 @@ class GitHubKeysScrapper:
                 count = 0
 
 
-since = sys.argv[1] if sys.argv[1] else None
+since = sys.argv[1] if len(sys.argv) > 1 else None
 
 GH = GitHubKeysScrapper('username', 'password')
 GH.parse_users(users_chunk = 50, since_user_id = since)
