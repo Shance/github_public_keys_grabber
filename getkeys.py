@@ -55,7 +55,7 @@ class GitHubKeysScrapper:
         user_insert = []
         key_insert  = []
         for user in users:
-            user_insert_one = (user.id, user.name, user.email, user.login, user.total_private_repos, user.total_private_gists)
+            user_insert_one = (user.id, user.name, user.email, user.login, user.blog)
             user_insert.append(user_insert_one)
             for key_line in user.keys:
                 key_type, key = key_line.key.split()
@@ -65,7 +65,7 @@ class GitHubKeysScrapper:
         try:
             with self.db_connection.cursor() as cursor:
                 if user_insert:
-                    cursor.executemany("INSERT IGNORE INTO `user` (`id`, `name`, `email`, `login`, `private_repos`, `private_gists`) VALUES (%s,%s,%s,%s,%s,%s)", user_insert)
+                    cursor.executemany("INSERT IGNORE INTO `user` (`id`, `name`, `email`, `login`, `site`) VALUES (%s,%s,%s,%s,%s)", user_insert)
                 if key_insert:
                     cursor.executemany("INSERT IGNORE INTO `pub_key` (`type`, `pub_key`, `user_id`) VALUES (%s, %s, %s)", key_insert)
             self.db_connection.commit()
